@@ -12,32 +12,32 @@
 
 //assume some functions used for the motor stepper 
 void digitalWrite (uint8_t port, uint8_t pin, bool value);
-char serialPort_Read(); //bytes
-void delay(uint32_t miliseconds); //ms
+char serialPort_Read(); // bytes
+void delay(uint32_t miliseconds); // ms
 
 //function to initialise the motor, motor set to LOW
 void stepperInit()
 {
-    digitalWrite(PORTD, EN_PIN, FALSE); 
+    digitalWrite(PORTD, EN_PIN, false); 
 }
 
 //function to step the motor 
-void stepMotor(uninit32_t steps, uninit32_t delayTime, bool directionForward)
+void stepMotor(uint32_t steps, uint32_t delayTime, bool directionForward)
 {
-    digitalWrite(PORTD, DIR_PIN, direction); //set motor direction
-    digitalWrite(PORTD, EN_PIN, TRUE); //then enable the motor 
+    digitalWrite(PORTD, DIR_PIN, directionForward); //set motor direction
+    digitalWrite(PORTD, EN_PIN, true); //then enable the motor 
 
     //motor steps with constaints 
-    for (uninit32_t i = 0; i < steps; i ++)
+    for (uint32_t i = 0; i < steps; i ++)
     {
-        digitalWrite(PORTD, STEP_PIN, TRUE); //motor step high 
+        digitalWrite(PORTD, STEP_PIN, true); //motor step high 
         delay(delayTime); //wait 
-        digitalWrite(PORTD, STEP_PIN, FALSE); //motor step low
+        digitalWrite(PORTD, STEP_PIN, false); //motor step low
         delay(delayTime); //wait 
     }
 
     //disable the motor 
-    digitalWrite(PORTD, EN_PIN, FALSE); //value set to LOW (false)
+    digitalWrite(PORTD, EN_PIN, false); //value set to LOW (false)
 
 }
 
@@ -46,7 +46,7 @@ int main()
 {
     stepperInit();
 
-    //read serial port
+    //Read serial port
     char serialData_input;
 
     while (1)
@@ -55,16 +55,14 @@ int main()
 
         switch (serialData_input)
         {
-            //step forward
-            case 'F':
+            case 'F': //step forward
                 stepMotor(20,5,true);
                 break;
-            //step backward
-            case 'B':
+            case 'B': //step backward
                 stepMotor(20,5,false);
                 break;
             default:
-                printf("Unknown input: %c\n", input); //print unknown serial data read
+                printf("Unknown input: %c\n", serialData_input); //print unknown serial data read
                 break;
         }
 
@@ -73,13 +71,25 @@ int main()
 }
 
 //Assume APIs with empty routines for the sake of completeness
-void digitalWrite (uint8_t port, uint8_t pin, bool value);
+void digitalWrite (uint8_t port, uint8_t pin, bool value)
 {
-    //implementation for testing
-    
+    //Dummy implementation 
+    printf("Setting Port %d pin %d to %s\n", port, pin, value ? "HIGH" : "LOW");
 }
-char serialPort_Read(); //bytes
-void delay(uint32_t miliseconds); //ms
+char serialPort_Read()
+{
+    //Dummy implementation
+    static char inputs[] = {'F', 'B', 'X'};
+    static int index = 0; 
+    char input = inputs[index];
+    index = (index + 1) %3; //Cycle through 'F','B', and 'X'
+    return input;
+}
+void delay(uint32_t miliseconds)
+{
+    //dummy implementation 
+    printf("Delaying for %d ms\n", miliseconds);
+}
 
 
 
