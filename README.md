@@ -22,6 +22,7 @@ Taggle Coding Challenge
     1 sec = max 200 steps/sec
     1 step = 5ms/step
     
+    Reference: https://learn.sparkfun.com/tutorials/easy-driver-hook-up-guide
 
 
 
