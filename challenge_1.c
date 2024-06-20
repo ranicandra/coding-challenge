@@ -1,10 +1,14 @@
 #include <stdint.h> 
+#include <stdbool.h>
+#include <stdio.h>
 
 //declare constants for the GPIO pins 
 #define PORTD 0 
 #define STEP_PIN 0
-#define DIR_PIN 1
-#define EN_PIN 2
+#define DIR_PIN 1 
+#define EN_PIN 2 
+#define MS1_PIN 3 //MS1 pin is tied to GND (low)
+#define MS2_PIN 4 //MS2 pin is tied to GND (low)
 
 //assume some functions used for the motor stepper 
 void digitalWrite (uint8_t port, uint8_t pin, bool value);
@@ -18,7 +22,7 @@ void stepperInit()
 }
 
 //function to step the motor 
-void stepMotor(uninit32_t steps, uninit32_t delayTime, bool direction)
+void stepMotor(uninit32_t steps, uninit32_t delayTime, bool directionForward)
 {
     digitalWrite(PORTD, DIR_PIN, direction); //set motor direction
     digitalWrite(PORTD, EN_PIN, TRUE); //then enable the motor 
@@ -47,7 +51,7 @@ int main()
 
     while (1)
     {
-        serialData_input = serialPort_Read();
+        serialData_input = serialPort_Read(); //Read input from serial port
 
         switch (serialData_input)
         {
@@ -59,11 +63,23 @@ int main()
             case 'B':
                 stepMotor(20,5,false);
                 break;
-            
+            default:
+                printf("Unknown input: %c\n", input); //print unknown serial data read
+                break;
         }
 
     }
     return 0;
 }
+
+//Assume APIs with empty routines for the sake of completeness
+void digitalWrite (uint8_t port, uint8_t pin, bool value);
+{
+    //implementation for testing
+    
+}
+char serialPort_Read(); //bytes
+void delay(uint32_t miliseconds); //ms
+
 
 

@@ -2,6 +2,7 @@
 Taggle Coding Challenge
 
 1_challenge_1
+    
     Requirements: 
     - A bi-polar stepper motor (GPIO pins connected to Port D (pins 0,1,2))
     - The motor has 20 steps per revolution (18 degrees per step), not more than 600 RPM
